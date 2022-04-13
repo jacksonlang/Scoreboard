@@ -22,7 +22,7 @@ conn = http.client.HTTPSConnection("api-nba-v1.p.rapidapi.com")
 
 #headers = {
 #    'X-RapidAPI-Host': "api-nba-v1.p.rapidapi.com",
-#    'X-RapidAPI-Key': "b000ca23a4mshddcbd4524667073p1d4364jsnef1cddc8cc67"
+#    'X-RapidAPI-Key': ""
 #    }
 
 #conn.request("GET", "/games?date="+s, headers=headers)
