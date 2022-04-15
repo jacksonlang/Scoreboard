@@ -1,6 +1,15 @@
 import http.client
 import json
 from datetime import date
+from flask import Flask
+from flask import render_template
+
+
+
+
+app = Flask(__name__)
+
+
 
 today = date.today()
 
@@ -49,8 +58,26 @@ NBAGamesToday = len(gamesLib["response"])
 #    + " |||| Home: " + teamLib["response"][gamesLib["response"][0]["teams"]["home"]["id"] - 1]["name"])
 
 i = 0
-
+gamesString = ""
 while i <= NBAGamesToday - 1:
-    print("Visitor: "+ teamLib["response"][gamesLib["response"][i]["teams"]["visitors"]["id"] - 1]["name"]
-    + " |||| Home: " + teamLib["response"][gamesLib["response"][i]["teams"]["home"]["id"] - 1]["name"])
+    gamesString += ("Visitor: "+ teamLib["response"][gamesLib["response"][i]["teams"]["visitors"]["id"] - 1]["name"]
+    + " |||| Home: " + teamLib["response"][gamesLib["response"][i]["teams"]["home"]["id"] - 1]["name"]) + "\n"
     i += 1
+
+#print(gamesString)
+
+#@app.route('/')
+#@app.route('/NBAhomepage')
+#def index():
+#    #name = teamLib["response"][]
+#    return render_template('NBAhomepage.html', title='NBA Games Today', games = gamesString)
+
+#if __name__ == '__main__':
+#   app.run()
+
+dictNbaTeams = {}
+
+ #   dictNbaTeams[a] = NBAteam(name)
+
+#for z in dictNbaTeams:
+#    print(z.getName())
