@@ -3,7 +3,7 @@ import json
 from datetime import date
 from flask import Flask
 from flask import render_template
-
+from NBA.NBATeamsDict import NBATeamDict as NBATeams
 
 
 
@@ -60,11 +60,12 @@ NBAGamesToday = len(gamesLib["response"])
 i = 0
 gamesString = ""
 while i <= NBAGamesToday - 1:
-    gamesString += ("Visitor: "+ teamLib["response"][gamesLib["response"][i]["teams"]["visitors"]["id"] - 1]["name"]
-    + " |||| Home: " + teamLib["response"][gamesLib["response"][i]["teams"]["home"]["id"] - 1]["name"]) + "\n"
+    NBAvisitor = NBATeams[gamesLib["response"][i]["teams"]["visitors"]["id"]]
+    NBAhome = NBATeams[gamesLib["response"][i]["teams"]["home"]["id"]]
+    gamesString += "Visitor: " + NBAvisitor[0] + " || Home: "+NBAhome[0] + "\n"
     i += 1
 
-#print(gamesString)
+print(gamesString)
 
 #@app.route('/')
 #@app.route('/NBAhomepage')
@@ -74,10 +75,3 @@ while i <= NBAGamesToday - 1:
 
 #if __name__ == '__main__':
 #   app.run()
-
-dictNbaTeams = {}
-
- #   dictNbaTeams[a] = NBAteam(name)
-
-#for z in dictNbaTeams:
-#    print(z.getName())
