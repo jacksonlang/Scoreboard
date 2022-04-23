@@ -2,8 +2,9 @@ import http.client
 import json
 from datetime import date
 from flask import Flask
-from flask import render_template
+from flask import render_template, url_for
 from NBA.NBATeamsDict import NBATeamDict as NBATeams
+from NBA.NBAGame import NBAGame as NBAGameClass
 
 
 
@@ -27,12 +28,12 @@ teamLib = json.loads(teamsjson)
 #print(teamLib["response"][1]["id"])
 
 
-conn = http.client.HTTPSConnection("api-nba-v1.p.rapidapi.com")
+#conn = http.client.HTTPSConnection("api-nba-v1.p.rapidapi.com")
 
 #headers = {
-#    'X-RapidAPI-Host': "api-nba-v1.p.rapidapi.com",
-#    'X-RapidAPI-Key': ""
-#    }
+ #   'X-RapidAPI-Host': "api-nba-v1.p.rapidapi.com",
+  #  'X-RapidAPI-Key': "b000ca23a4mshddcbd4524667073p1d4364jsnef1cddc8cc67"
+   # }
 
 #conn.request("GET", "/games?date="+s, headers=headers)
 
@@ -45,7 +46,7 @@ conn = http.client.HTTPSConnection("api-nba-v1.p.rapidapi.com")
 
 #with open('Games.json', 'w') as f:
 #    json.dump(jsongames, f, ensure_ascii=False, indent=4)
-#
+
 with open('Games.json', 'r') as fp:
     gamesjson = json.load(fp)
 
@@ -58,20 +59,23 @@ NBAGamesToday = len(gamesLib["response"])
 #    + " |||| Home: " + teamLib["response"][gamesLib["response"][0]["teams"]["home"]["id"] - 1]["name"])
 
 i = 0
-gamesString = ""
+NBAGames = {}
+
 while i <= NBAGamesToday - 1:
-    NBAvisitor = NBATeams[gamesLib["response"][i]["teams"]["visitors"]["id"]]
-    NBAhome = NBATeams[gamesLib["response"][i]["teams"]["home"]["id"]]
-    gamesString += "Visitor: " + NBAvisitor[0] + " || Home: "+NBAhome[0] + "\n"
+    NBAVisitor = NBATeams[gamesLib["response"][i]["teams"]["visitors"]["id"]]
+    NBAHome = NBATeams[gamesLib["response"][i]["teams"]["home"]["id"]]
+    GameId = gamesLib["response"][i]["id"]
+    #time is like 1:30 ahead of est so need to make that change
+    NBAgameStart = gamesLib["response"][i]["date"]["start"]
+    g = NBAGameClass(NBAVisitor, NBAHome, NBAgameStart, GameId)
+    NBAGames[i] = g
     i += 1
 
-print(gamesString)
+@app.route('/')
+@app.route('/NBAhomepage')
+def index():
+    #name = teamLib["response"][]
+    return render_template('NBAhomepage.html', len = NBAGamesToday - 1, NBAGames = NBAGames)
 
-#@app.route('/')
-#@app.route('/NBAhomepage')
-#def index():
-#    #name = teamLib["response"][]
-#    return render_template('NBAhomepage.html', title='NBA Games Today', games = gamesString)
-
-#if __name__ == '__main__':
-#   app.run()
+if __name__ == '__main__':
+   app.run()
